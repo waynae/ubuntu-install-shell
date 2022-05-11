@@ -15,6 +15,7 @@ Plug 'mattn/emmet-vim'
 Plug 'godlygeek/tabular'
 Plug 'Lokaltog/vim-easymotion'
 Plug 'https://github.com/airblade/vim-gitgutter.git'
+"Plug 'iamcco/markdown-preview.nvim',{ 'do': ':call mkdp#util#install()', 'for': ['markdown', 'vim-plug'] }
 Plug 'iamcco/markdown-preview.vim'
 Plug 'Raimondi/delimitMate'
 Plug 'tomasr/molokai'
@@ -55,8 +56,46 @@ if (&t_Co > 2 || has("gui_running")) && !exists("syntax_on")
   syntax on
 endif
 
-"filetype plugin indent on
+filetype plugin indent on
 filetype plugin on
+
+autocmd BufNewFile *.sh,*.py,*.md exec ":call SetTitle()"
+
+func SetTitle()
+    if &filetype == 'sh'
+        call setline(1,"\#########################################################################")
+        call append(line("."), "\# File   : ".expand("%"))
+        call append(line(".")+1, "\# Author : xxxxxxx")
+        call append(line(".")+2, "\# Email  : xxxxxxxx@gmail.com")
+        call append(line(".")+3, "\# Time   : ".strftime("%c"))
+        call append(line(".")+4, "\#########################################################################")
+        call append(line(".")+5, "\#!/bin/bash")
+        call append(line(".")+6, "")
+    elseif &filetype == 'python'
+        call setline(1, "#!/usr/bin/env python")
+        call append(line("."), "# -*- coding: utf-8 -*-")
+        call append(line(".")+1,"\"\"\"")
+        call append(line(".")+2, "\# @File   : ".expand("%"))
+        call append(line(".")+3, "\# @Author : xxxxxxx")
+        call append(line(".")+4, "\# @Email  : xxxxxxxx@gmail.com")
+        call append(line(".")+5, "\# @Time   : ".strftime("%c"))
+        call append(line(".")+6, "")
+        call append(line(".")+7, "\"\"\"")
+        call append(line(".")+8, "")
+    elseif &filetype == 'markdown'
+        call setline(1,"\/*")
+        call append(line("."), "\ > File Name: ".expand("%"))
+        call append(line(".")+1, "\ > Author: xxxxxxx")
+        call append(line(".")+2, "\ > Email: xxxxxxxx@gmail.com")
+        call append(line(".")+3, "\ > Created Time: ".strftime("%c"))
+        call append(line(".")+4, "")
+        call append(line(".")+5, "\*/")
+        call append(line(".")+6, "")
+    endif
+
+endfunc
+
+autocmd BufNewFile * normal G
 
 " Color
 colorscheme molokai
